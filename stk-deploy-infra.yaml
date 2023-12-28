@@ -1,0 +1,43 @@
+name: Deploy Infra
+
+on:
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches:    
+      - main
+      - 'releases/**'
+    # Sequence of patterns matched against refs/tags
+    tags:        
+      - v2
+      - v1.*
+
+# Avoid concurrency workflows for the same ref (always using latest version)
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Specific envionment variables for the project context
+env:
+  WORKSPACE_NAME: my-workspace
+  ENVIRONEMNT_NAME: my-environment
+  VERSION_TAG: ${{ github.sha }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup STK CLI
+        uses: stack-spot/stk-cli-action@v1
+        with:
+          client_id: ${{ secrets.CLIENT_ID }}
+          client_key: ${{ secrets.CLIENT_KEY }}
+          realm: ${{ secrets.CLIENT_REALM }}
+
+      - name: Setup workspace
+        run: stk use workspace ${{env.WORKSPACE_NAME}}
+
+      - name: Deploy Infra
+        run: stk deploy infra -e ${{env.ENVIRONMENT_NAME}} -v ${{env.VERSION_TAG}} --watch --verbose
