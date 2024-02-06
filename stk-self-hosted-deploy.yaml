@@ -98,6 +98,7 @@ jobs:
                  "token":"{token}"       // only if privite is true
               }
            ]
+          PATH_TO_MOUNT: ${{ github.workspace }
 
       - name: My customizable DEPLOY step
         if: contains( matrix.task.taskType , 'DEPLOY')
@@ -128,6 +129,7 @@ jobs:
                  "token":"{token}"       // only if privite is true
               }
            ]
+          PATH_TO_MOUNT: ${{ github.workspace }
 
       - name: My customizable DESTROY step
         if: contains( matrix.task.taskType , 'DESTROY')
