@@ -56,7 +56,7 @@ jobs:
     steps:
       - name: Job IAC
         if: contains( matrix.task.taskType , 'IAC')
-        uses: stack-spot/runtime-iac-action@v1
+        uses: stack-spot/runtime-iac-action@v2
         with:
           FEATURES_LEVEL_LOG: debug
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
@@ -76,7 +76,7 @@ jobs:
 
       - name: Job DEPLOY
         if: contains( matrix.task.taskType , 'DEPLOY')
-        uses: stack-spot/runtime-deploy-action@v1
+        uses: stack-spot/runtime-deploy-action@v2
         with:
           FEATURES_LEVEL_LOG: debug
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
@@ -99,6 +99,7 @@ jobs:
               }
            ]
           PATH_TO_MOUNT: ${{ github.workspace }
+          OUTPUT_FILE: outputs.json
 
       - name: My customizable DEPLOY step
         if: contains( matrix.task.taskType , 'DEPLOY')
@@ -107,7 +108,7 @@ jobs:
 
       - name: Job DESTROY
         if: contains( matrix.task.taskType , 'DESTROY')
-        uses: stack-spot/runtime-destroy-action@v1
+        uses: stack-spot/runtime-destroy-action@v2
         with:
           FEATURES_LEVEL_LOG: debug
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
